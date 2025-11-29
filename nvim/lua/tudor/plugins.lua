@@ -45,6 +45,9 @@ return packer.startup(function(use)
     end
   }
 
+  -- Mason for installing LSPs etc
+  use 'mason-org/mason.nvim'
+
   -- Highlight current scope
   use 'lukas-reineke/indent-blankline.nvim'
 
@@ -53,7 +56,8 @@ return packer.startup(function(use)
   use { 'catppuccin/nvim', as = 'catppuccin' }
 
   -- dim inactive windows
-  use 'sunjon/shade.nvim'
+  -- TODO: last update causes issues, look into re-enabling later
+  -- use 'sunjon/shade.nvim'
 
   -- Tree folder structure
   use {
@@ -87,7 +91,7 @@ return packer.startup(function(use)
   }
 
   -- status bar
-  use 'freddiehaddad/feline.nvim'
+  use 'feline-nvim/feline.nvim'
 
   -- shows code context in winbar
   use({

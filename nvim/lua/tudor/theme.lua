@@ -1,13 +1,11 @@
 local status, shade = pcall(require, "shade")
-if not status then
-  return
+if status then
+  -- Add an overlay to the inactive windows
+  shade.setup({
+    overlay_opacity = 50,
+    opacity_step = 1,
+  })
 end
-
--- Add an overlay to the inactive windows
-shade.setup({
-  overlay_opacity = 50,
-  opacity_step = 1,
-})
 
 -- Customize LSP symbols
 local function lspSymbol(name, icon)
@@ -21,4 +19,3 @@ lspSymbol('Warning', '')
 lspSymbol('Information', '')
 lspSymbol('Info', '')
 lspSymbol('Hint', '')
-

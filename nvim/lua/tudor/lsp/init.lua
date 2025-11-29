@@ -1,9 +1,3 @@
--- import lsp config
-local has_lsp, lspconfig = pcall(require, 'lspconfig')
-if not has_lsp then
-  return
-end
-
 -- Diagnostics mappings
 local opts = { noremap = true, silent = true }
 vim.keymap.set('n', '<space>e', vim.diagnostic.open_float, opts)
@@ -42,107 +36,32 @@ local on_attach = function(client, bufnr)
   vim.keymap.set('n', '<space>f', vim.lsp.buf.format, bufopts)
 end
 
--- Custom Flutter mappings
-local flutter_on_attach = function(client, bufnr)
-  local bufopts = { noremap = true, silent = true, buffer = bufnr }
-  vim.keymap.set('n', 'hr', '<cmd>FlutterReload<cr>', bufopts)
-  vim.keymap.set('n', 'fo', '<cmd>FlutterOutlineToggle<cr>', bufopts)
-  vim.keymap.set('n', '<leader>cf', '<cmd>DartFmt<cr>', bufopts)
-end
+-- Setup Mason
+require("mason").setup({
+  registries = {
+    "github:mason-org/mason-registry",
+    "github:Crashdummyy/mason-registry",
+  }
+})
 
 -- Setup each LSP
 
 -- C#
-require("roslyn").setup({
-  config = {
-    on_attach = on_attach,
-    capabilities = capabilities,
-  },
+vim.lsp.config("roslyn", {
+  on_attach = on_attach,
+  --  cmd = {
+  --    "dotnet",
+  --    "/Users/tudor/.local/share/nvim/roslyn/Microsoft.CodeAnalysis.LanguageServer.dll",
+  --    "--logLevel=Information",
+  --    "--extensionLogDirectory=" .. vim.fs.dirname(vim.lsp.get_log_path()),
+  --    "--stdio",
+  --  },
 })
-
--- Typescript
-lspconfig.ts_ls.setup {
-  on_attach = on_attach,
-}
--- finish Typescript
-
--- CSS
-capabilities.textDocument.completion.completionItem.snippetSupport = true
-lspconfig.cssls.setup {
-  capabilities = capabilities,
-  on_attach = on_attach,
-}
-lspconfig.cssmodules_ls.setup {
-  on_attach = on_attach,
-}
--- finish CSS
---
--- Flutter
-require("flutter-tools").setup {
-  ui = {
-    border = "rounded",
-    notification_style = 'native',
-  },
-  decorations = {
-    statusline = {
-      app_version = true,
-      device = true,
-    }
-  },
-  debugger = {
-    enabled = true,
-    run_via_dap = false,
-    exception_breakpoints = {},
-    register_configurations = function(_)
-      require("dap").configurations.dart = {}
-      require("dap.ext.vscode").load_launchjs()
-    end,
-  },
-  widget_guides = {
-    enabled = true,
-  },
-  closing_tags = {
-    highlight = "WarningMsg", -- highlight for the closing tag
-    prefix = ">",             -- character to use for close tag e.g. > Widget
-    enabled = true            -- set to false to disable
-  },
-  dev_log = {
-    enabled = true,
-    open_cmd = "tabedit", -- command to use to open the log buffer
-  },
-  dev_tools = {
-    autostart = false,         -- autostart devtools server if not detected
-    auto_open_browser = false, -- Automatically opens devtools in the browser
-  },
-  outline = {
-    open_cmd = "30vnew", -- command to use to open the outline buffer
-    auto_open = false    -- if true this will open the outline automatically when it is first populated
-  },
-  lsp = {
-    color = { -- show the derived colours for dart variables
-      enabled = true, -- whether or not to highlight color variables at all, only supported on flutter >= 2.10
-      background = false, -- highlight the background
-      foreground = true, -- highlight the foreground
-      virtual_text = true, -- show the highlight using virtual text
-      virtual_text_str = "■", -- the virtual text character to highlight
-    },
-    on_attach = function(client, bufnr)
-      on_attach(client, bufnr)
-      flutter_on_attach(client, bufnr)
-    end,
-    capabilities = capabilities,
-    settings = {
-      showTodos = true,
-      completeFunctionCalls = true,
-      renameFilesWithClasses = "prompt", -- "always"
-      enableSnippets = true,
-    }
-  }
-}
--- finish Flutter
+vim.lsp.enable("roslyn")
+-- finish C#
 
 -- Lua
-lspconfig.lua_ls.setup {
+vim.lsp.config("lua_ls", {
   on_attach = on_attach,
   settings = {
     Lua = {
@@ -164,7 +83,8 @@ lspconfig.lua_ls.setup {
       },
     },
   },
-}
+})
+vim.lsp.enable("lua_ls")
 -- finish Lua
 
 -- nvim-cmp setup
