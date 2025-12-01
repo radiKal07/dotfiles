@@ -6,7 +6,7 @@ What is nice about this is that I use a Lua-only config for Neovim. So far my se
 
 ## Screenshots
 
-![Screenshot of Neovim with LSP](https://i.imgur.com/tFPHVyM.png)
+![Screenshot of Neovim with LSP](ss.png "Screenshot")
 
 ## Installing
 
